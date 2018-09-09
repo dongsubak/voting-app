@@ -1,9 +1,16 @@
+/* eslint-disable no-param-reassign, operator-assignment */
+
 class ProductList extends React.Component {
   state = {
     products: [],
   };
 
+  componentDidMount() {
+    this.setState({ products: Seed.products });
+  }
+
   handleProductUpVote = (productId) => {
+    console.log(this.state);
     const nextProducts = this.state.products.map((product)=> {
       if (product.id === productId) {
         return Object.assign({}, product, {
@@ -44,17 +51,15 @@ class ProductList extends React.Component {
   }
   */
   
-  componentDidMount() {
-    this.setState({ products: Seed.products});
-  }
 
   render() {
-    const product = Seed.products[0];
-    const products = Seed.products.sort((a, b) => (
+    // const product = Seed.products[0];
+    const products = this.state.products.sort((a, b) => (
       b.votes - a.votes
     ));
     const productComponents = products.map((product) => (
         <Product 
+          key={'product-' + product.id}
           id={product.id}
           title={product.title}
           description={product.description}
@@ -69,25 +74,16 @@ class ProductList extends React.Component {
       <div className='ui unstackable items'>
         {productComponents}
         React Component
-        <Product 
-          id={product.id}
-          title={product.title}
-          description={product.description}
-          url={product.url}
-          votes={product.votes}       
-          submitterAvatarUrl={product.submitterAvatarUrl}
-          productImageUrl={product.productImageUrl}
-          onVote={this.handleProductUpVote}
-        />
       </div>
     );
   }
 }
 
 class Product extends React.Component {
-  handleUpVote = () => (
-    this.props.onVote(this.props.id)
-  );
+  handleUpVote = () => {
+    this.props.onVote(this.props.id);
+    console.log('Up');
+  };
   /*
   constructor(props) {
     super(props); // always call this first
@@ -112,12 +108,18 @@ class Product extends React.Component {
               {this.props.votes}
             </div>
             <div className='description'>
-              <a href={this.props.url}>{this.props.title}</a>
-              <p>{this.props.description}</p>
+              <a href={this.props.url}>
+                {this.props.title}
+              </a>
+              <p>
+                {this.props.description}
+              </p>
             </div>
             <div className='extra'>
               <span>Submitted by:</span>
-              <img className='ui avatar image' src={this.props.submitterAvatarUrl} />
+              <img 
+                className='ui avatar image' 
+                src={this.props.submitterAvatarUrl} />
             </div>
           </div>
         </div>
