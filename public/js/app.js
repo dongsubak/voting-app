@@ -1,4 +1,23 @@
 class ProductList extends React.Component {
+  state = {
+    products: [],
+  };
+
+  handleProductUpVote = (productId) => {
+    const nextProducts = this.state.products.map((product)=> {
+      if (product.id === productId) {
+        return Object.assign({}, product, {
+          votes: product.votes + 1,
+        });
+      } else {
+        return product;
+      }
+    });
+    this.setState({
+      products: nextProducts,
+    });
+  }
+  /*
   constructor(props) {
     super(props);
 
@@ -8,10 +27,7 @@ class ProductList extends React.Component {
 
     this.handleProductUpVote = this.handleProductUpVote.bind(this);
   }
-  componentDidMount() {
-    this.setState({ products: Seed.products});
-  }
-
+  
   handleProductUpVote(productId) {
     const nextProducts = this.state.products.map((product)=> {
       if (product.id === productId) {
@@ -24,8 +40,14 @@ class ProductList extends React.Component {
     });
     this.setState({
       products: nextProducts,
-    })
+    });
   }
+  */
+  
+  componentDidMount() {
+    this.setState({ products: Seed.products});
+  }
+
   render() {
     const product = Seed.products[0];
     const products = Seed.products.sort((a, b) => (
@@ -63,6 +85,10 @@ class ProductList extends React.Component {
 }
 
 class Product extends React.Component {
+  handleUpVote = () => (
+    this.props.onVote(this.props.id)
+  );
+  /*
   constructor(props) {
     super(props); // always call this first
     // custom method bindings here
@@ -71,6 +97,7 @@ class Product extends React.Component {
   handleUpVote() {
     this.props.onVote(this.props.id);
   }
+  */
   render() {
     return (
       <div className='item'>
